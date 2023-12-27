@@ -47,11 +47,14 @@
       var ground = BABYLON.MeshBuilder.CreateGround("gd", {width: 40, height: 40, subdivsions: 4}, scene);
       ground.material = skyMaterial;
 
-      var sphere1 = BABYLON.MeshBuilder.CreateSphere("sphere1", { segments: 6, diameter: 4 }, scene);
+
+      //var normalMaterial = new BABYLON.NormalMaterial("normalMat", scene);
+      var sphere1 = BABYLON.MeshBuilder.CreateSphere("sphere1", {diameter: 4 }, scene);
+      //var sphere1 = BABYLON.MeshBuilder.CreateSphere("sphere1", { segments: 6, diameter: 4 }, scene);
       sphere1.position.y = 10;
       sphere1.material = new BABYLON.StandardMaterial("mat1", scene);
       sphere1.material.diffuseColor = new BABYLON.Color3(1, 0, 0);//Red
-      sphere1.material.wireframe = true;
+      //sphere1.material.wireframe = true;
 
 
 
@@ -135,9 +138,9 @@
       //animationGroup.normalize(0, 100);
       animationGroup.play(true);
 
-      //setTimeout(() => { myAnim.stop() }, 5000);
+      //setTimeout(() => { myAnim.stop() }, 5000);и
 
-
+      
       // return the scene object
       return scene;
     };
