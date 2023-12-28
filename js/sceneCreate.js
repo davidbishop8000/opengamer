@@ -46,6 +46,134 @@
 
       var ground = BABYLON.MeshBuilder.CreateGround("gd", {width: 40, height: 40, subdivsions: 4}, scene);
       ground.material = skyMaterial;
+      
+      const b_center = BABYLON.MeshBuilder.CreateBox("box", {height: 0.1, width: 3.3, depth: 3.3});
+      b_center.position.y = 0.2;
+      const b_centerMat = new BABYLON.StandardMaterial("b_centerMat");
+      b_centerMat.diffuseColor = new BABYLON.Color3(1, 0.5, 0.5);
+      b_center.material = b_centerMat;
+      const b_r = BABYLON.MeshBuilder.CreateBox("box", {height: 0.1, width: 9, depth: 9});
+      b_r.position = new BABYLON.Vector3(7, 0.2, 7);
+      const b_rMat = new BABYLON.StandardMaterial("b_rMat");
+      b_rMat.diffuseColor = new BABYLON.Color3(1, 0, 0);
+      b_r.material = b_rMat;
+      const b_g = BABYLON.MeshBuilder.CreateBox("box", {height: 0.1, width: 9, depth: 9});
+      b_g.position = new BABYLON.Vector3(-7, 0.2, 7);
+      const b_gMat = new BABYLON.StandardMaterial("b_gMat");
+      b_gMat.diffuseColor = new BABYLON.Color3(0, 1, 0);
+      b_g.material = b_gMat;
+      const b_b = BABYLON.MeshBuilder.CreateBox("box", {height: 0.1, width: 9, depth: 9});
+      b_b.position = new BABYLON.Vector3(-7, 0.2, -7);
+      const b_bMat = new BABYLON.StandardMaterial("b_bMat");
+      b_bMat.diffuseColor = new BABYLON.Color3(0, 0, 1);
+      b_b.material = b_bMat;
+      const b_y = BABYLON.MeshBuilder.CreateBox("box", {height: 0.1, width: 9, depth: 9});
+      b_y.position = new BABYLON.Vector3(7, 0.2, -7);
+      const b_yMat = new BABYLON.StandardMaterial("b_yMat");
+      b_yMat.diffuseColor = new BABYLON.Color3(1, 1, 0);
+      b_y.material = b_yMat;
+
+      var prepareButton = function (mesh, color, light) {
+        var goToColorAction = new BABYLON.InterpolateValueAction(BABYLON.ActionManager.OnPickTrigger, light, "diffuse", color, 1000, null, true);
+
+        mesh.actionManager = new BABYLON.ActionManager(scene);
+        mesh.actionManager.registerAction(
+            new BABYLON.InterpolateValueAction(BABYLON.ActionManager.OnPickTrigger, light, "diffuse", BABYLON.Color3.Black(), 1000))
+            .then(new BABYLON.CombineAction(BABYLON.ActionManager.NothingTrigger, [ // Then is used to add a child action used alternatively with the root action. 
+                goToColorAction,                                                 // First click: root action. Second click: child action. Third click: going back to root action and so on...   
+                new BABYLON.SetValueAction(BABYLON.ActionManager.NothingTrigger, mesh.material, "wireframe", false)
+            ]));
+        mesh.actionManager.registerAction(new BABYLON.SetValueAction(BABYLON.ActionManager.OnPickTrigger, mesh.material, "wireframe", true))
+            .then(new BABYLON.DoNothingAction());
+        mesh.actionManager.registerAction(new BABYLON.SetStateAction(BABYLON.ActionManager.OnPickTrigger, light, "off"))
+            .then(new BABYLON.SetStateAction(BABYLON.ActionManager.OnPickTrigger, light, "on"));
+      }
+
+      var makeOverOut = function (mesh, color) {
+        const Mat = new BABYLON.StandardMaterial("Mat");
+        Mat.diffuseColor = color;
+        mesh.material = Mat;
+        mesh.actionManager = new BABYLON.ActionManager(scene);
+        mesh.actionManager.registerAction(new BABYLON.SetValueAction(BABYLON.ActionManager.OnPointerOutTrigger, mesh.material, "emissiveColor", mesh.material.emissiveColor));
+        mesh.actionManager.registerAction(new BABYLON.SetValueAction(BABYLON.ActionManager.OnPointerOverTrigger, mesh.material, "emissiveColor", BABYLON.Color3.White()));
+        mesh.actionManager.registerAction(new BABYLON.InterpolateValueAction(BABYLON.ActionManager.OnPointerOutTrigger, mesh, "scaling", new BABYLON.Vector3(1, 1, 1), 150));
+        mesh.actionManager.registerAction(new BABYLON.InterpolateValueAction(BABYLON.ActionManager.OnPointerOverTrigger, mesh, "scaling", new BABYLON.Vector3(1.1, 1.1, 1.1), 150));
+        mesh.actionManager.registerAction(new BABYLON.ExecuteCodeAction(BABYLON.ActionManager.OnPickTrigger,
+          function(){
+            console.log(mesh.position.x, mesh.position.y);
+          }
+          ));
+      }
+
+      let arr_r = [];
+      let arr_g = [];
+      let arr_b = [];
+      let arr_y = [];
+      for (let i=0; i<8; i++)
+      {
+        arr_r[i] = BABYLON.MeshBuilder.CreateBox("box", {height: 0.1, width: 1, depth: 1});
+        arr_r[i].position.x += (2.5 + i*1.2);
+        arr_r[i].position.y = 0.2;
+        arr_r[i+8] = BABYLON.MeshBuilder.CreateBox("box", {height: 0.1, width: 1, depth: 1});
+        arr_r[i+8].position.x += (2.5 + i*1.2);
+        arr_r[i+8].position.z = 1.2;
+        arr_r[i+8].position.y = 0.2;
+        arr_r[i+16] = BABYLON.MeshBuilder.CreateBox("box", {height: 0.1, width: 1, depth: 1});
+        arr_r[i+16].position.x += (2.5 + i*1.2);
+        arr_r[i+16].position.z = -1.2;
+        arr_r[i+16].position.y = 0.2;
+        makeOverOut(arr_r[i], new BABYLON.Color3.Red());
+        makeOverOut(arr_r[i+8], new BABYLON.Color3(0.8, 0.8, 0.8));
+        makeOverOut(arr_r[i+16], new BABYLON.Color3(0.8, 0.8, 0.8));
+
+        arr_g[i] = BABYLON.MeshBuilder.CreateBox("box", {height: 0.1, width: 1, depth: 1});
+        arr_g[i].position.z += (2.5 + i*1.2);
+        arr_g[i].position.y = 0.2;
+        arr_g[i+8] = BABYLON.MeshBuilder.CreateBox("box", {height: 0.1, width: 1, depth: 1});
+        arr_g[i+8].position.z += (2.5 + i*1.2);
+        arr_g[i+8].position.x = 1.2;
+        arr_g[i+8].position.y = 0.2;
+        arr_g[i+16] = BABYLON.MeshBuilder.CreateBox("box", {height: 0.1, width: 1, depth: 1});
+        arr_g[i+16].position.z += (2.5 + i*1.2);
+        arr_g[i+16].position.x = -1.2;
+        arr_g[i+16].position.y = 0.2;
+        makeOverOut(arr_g[i], new BABYLON.Color3.Green());
+        makeOverOut(arr_g[i+8], new BABYLON.Color3(0.8, 0.8, 0.8));
+        makeOverOut(arr_g[i+16], new BABYLON.Color3(0.8, 0.8, 0.8));
+
+        arr_b[i] = BABYLON.MeshBuilder.CreateBox("box", {height: 0.1, width: 1, depth: 1});
+        arr_b[i].position.x -= (2.5 + i*1.2);
+        arr_b[i].position.y = 0.2;
+        arr_b[i+8] = BABYLON.MeshBuilder.CreateBox("box", {height: 0.1, width: 1, depth: 1});
+        arr_b[i+8].position.x -= (2.5 + i*1.2);
+        arr_b[i+8].position.z = 1.2;
+        arr_b[i+8].position.y = 0.2;
+        arr_b[i+16] = BABYLON.MeshBuilder.CreateBox("box", {height: 0.1, width: 1, depth: 1});
+        arr_b[i+16].position.x -= (2.5 + i*1.2);
+        arr_b[i+16].position.z = -1.2;
+        arr_b[i+16].position.y = 0.2;
+        makeOverOut(arr_b[i], new BABYLON.Color3.Blue());
+        makeOverOut(arr_b[i+8], new BABYLON.Color3(0.8, 0.8, 0.8));
+        makeOverOut(arr_b[i+16], new BABYLON.Color3(0.8, 0.8, 0.8));
+
+        arr_y[i] = BABYLON.MeshBuilder.CreateBox("box", {height: 0.1, width: 1, depth: 1});
+        arr_y[i].position.z -= (2.5 + i*1.2);
+        arr_y[i].position.y = 0.2;
+        arr_y[i+8] = BABYLON.MeshBuilder.CreateBox("box", {height: 0.1, width: 1, depth: 1});
+        arr_y[i+8].position.z -= (2.5 + i*1.2);
+        arr_y[i+8].position.x = 1.2;
+        arr_y[i+8].position.y = 0.2;
+        arr_y[i+16] = BABYLON.MeshBuilder.CreateBox("box", {height: 0.1, width: 1, depth: 1});
+        arr_y[i+16].position.z -= (2.5 + i*1.2);
+        arr_y[i+16].position.x = -1.2;
+        arr_y[i+16].position.y = 0.2;
+        makeOverOut(arr_y[i], new BABYLON.Color3.Yellow());
+        makeOverOut(arr_y[i+8], new BABYLON.Color3(0.8, 0.8, 0.8));
+        makeOverOut(arr_y[i+16], new BABYLON.Color3(0.8, 0.8, 0.8));
+      }
+
+
+    /*
 
 
       //var normalMaterial = new BABYLON.NormalMaterial("normalMat", scene);
@@ -138,8 +266,8 @@
       //animationGroup.normalize(0, 100);
       animationGroup.play(true);
 
-      //setTimeout(() => { myAnim.stop() }, 5000);и
-
+      //setTimeout(() => { myAnim.stop() }, 5000);
+*/
       
       // return the scene object
       return scene;
