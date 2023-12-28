@@ -22,10 +22,38 @@
       // create scene object
 
       var scene = new BABYLON.Scene(engine);
-      var camera = new BABYLON.ArcRotateCamera("Camera", -Math.PI / 2, Math.PI / 2.5, 40, BABYLON.Vector3.Zero(), scene);
+      //scene.clearColor = new BABYLON.Color3(0, 0, 0);
+      // var scMaterial = new BABYLON.StandardMaterial("sc", scene);
+      // scMaterial.diffuseTexture = new BABYLON.Texture("space.jpg");
+      // scene.material = scMaterial;
+
+      // let hdrTexture = BABYLON.CubeTexture.diffuseTexture = new BABYLON.Texture("space.jpg");
+      // scene.createDefaultSkybox(hdrTexture, true, 10, 3);
+
+
+
+
+
+            // Skybox
+      var skybox = BABYLON.Mesh.CreateBox("skyBox", 1000.0, scene);
+      var skyboxMaterial = new BABYLON.StandardMaterial("skyBox", scene);
+      skyboxMaterial.backFaceCulling = false;
+      skyboxMaterial.reflectionTexture = new BABYLON.CubeTexture("texture/space", scene);
+      skyboxMaterial.reflectionTexture.coordinatesMode = BABYLON.Texture.SKYBOX_MODE;
+      skyboxMaterial.diffuseColor = new BABYLON.Color3(0, 0, 0);
+      skyboxMaterial.specularColor = new BABYLON.Color3(0, 0, 0);
+      skybox.material = skyboxMaterial;
+
+
+
+
+
+
+
+      var camera = new BABYLON.ArcRotateCamera("Camera", -Math.PI / 2.5, Math.PI /3.2, 300, BABYLON.Vector3.Zero(), scene);
       camera.attachControl(canvas, true);
 
-      var light = new BABYLON.HemisphericLight("light1", new BABYLON.Vector3(1, 0.5, 0), scene);
+      var light = new BABYLON.HemisphericLight("light1", new BABYLON.Vector3(0, 10, 0), scene);
       light.intensity = 0.8;
 
       var skyMaterial = new BABYLON.GridMaterial("skyMaterial", scene);
@@ -51,26 +79,31 @@
       b_center.position.y = 0.2;
       const b_centerMat = new BABYLON.StandardMaterial("b_centerMat");
       b_centerMat.diffuseColor = new BABYLON.Color3(1, 0.5, 0.5);
+      b_centerMat.alpha = 0.9;
       b_center.material = b_centerMat;
       const b_r = BABYLON.MeshBuilder.CreateBox("box", {height: 0.1, width: 9, depth: 9});
       b_r.position = new BABYLON.Vector3(7, 0.2, 7);
       const b_rMat = new BABYLON.StandardMaterial("b_rMat");
       b_rMat.diffuseColor = new BABYLON.Color3(1, 0, 0);
+      b_rMat.alpha = 0.7;
       b_r.material = b_rMat;
       const b_g = BABYLON.MeshBuilder.CreateBox("box", {height: 0.1, width: 9, depth: 9});
       b_g.position = new BABYLON.Vector3(-7, 0.2, 7);
       const b_gMat = new BABYLON.StandardMaterial("b_gMat");
       b_gMat.diffuseColor = new BABYLON.Color3(0, 1, 0);
       b_g.material = b_gMat;
+      b_gMat.alpha = 0.7;
       const b_b = BABYLON.MeshBuilder.CreateBox("box", {height: 0.1, width: 9, depth: 9});
       b_b.position = new BABYLON.Vector3(-7, 0.2, -7);
       const b_bMat = new BABYLON.StandardMaterial("b_bMat");
       b_bMat.diffuseColor = new BABYLON.Color3(0, 0, 1);
+      b_bMat.alpha = 0.7;
       b_b.material = b_bMat;
       const b_y = BABYLON.MeshBuilder.CreateBox("box", {height: 0.1, width: 9, depth: 9});
       b_y.position = new BABYLON.Vector3(7, 0.2, -7);
       const b_yMat = new BABYLON.StandardMaterial("b_yMat");
       b_yMat.diffuseColor = new BABYLON.Color3(1, 1, 0);
+      b_yMat.alpha = 0.7;
       b_y.material = b_yMat;
 
       var prepareButton = function (mesh, color, light) {
@@ -268,6 +301,42 @@
 
       //setTimeout(() => { myAnim.stop() }, 5000);
 */
+
+
+    // var coreSphere = BABYLON.MeshBuilder.CreateSphere("coreSphere", {diameter: 2.01, segments: 64}, scene);
+    // coreSphere.position = new BABYLON.Vector3(5, 5, 5);
+    // var sunMat = new BABYLON.StandardMaterial("Sun");
+    // sunMat.diffuseTexture = new BABYLON.FireProceduralTexture("fire", 256, scene);
+    // coreSphere.material = sunMat;
+
+
+    var coreSphere = BABYLON.MeshBuilder.CreateSphere("coreSphere", {diameter: 20, segments: 64}, scene);
+
+    var sunMaterial = new BABYLON.StandardMaterial("sun", scene);
+    sunMaterial.diffuseTexture = new BABYLON.Texture("texture/sun.png");
+    coreSphere.position = new BABYLON.Vector3(140, 40, 140);
+
+    coreSphere.material = sunMaterial;
+    //coreSphere.rotate(new BABYLON.Vector3(1.0, 1.0, 0.5), Math.PI / 3.0, BABYLON.Space.Local);
+
+    var moonSphere = BABYLON.MeshBuilder.CreateSphere("mooS", {diameter: 10, segments: 64}, scene);
+    var moonMaterial = new BABYLON.StandardMaterial("moonM", scene);
+    moonMaterial.diffuseTexture = new BABYLON.Texture("texture/titan.jpg");
+    moonSphere.position = new BABYLON.Vector3(140, 20, 140);
+    moonSphere.material = moonMaterial;
+
+    var alpha = 0;
+    scene.registerBeforeRender(function () {
+      coreSphere.position.x = 140 * Math.cos(alpha);
+      //coreSphere.position.y = 40;
+      coreSphere.position.z = 140 * Math.sin(alpha);
+      moonSphere.position.x = -200 *Math.cos(alpha/4);
+      //coreSphere.position.y = 40;
+      moonSphere.position.z = -200 * Math.sin(alpha/4);
+      alpha += 0.001;
+    });
+
+
       
       // return the scene object
       return scene;
