@@ -133,7 +133,7 @@
         mesh.actionManager.registerAction(new BABYLON.InterpolateValueAction(BABYLON.ActionManager.OnPointerOverTrigger, mesh, "scaling", new BABYLON.Vector3(1.1, 1.1, 1.1), 150));
         mesh.actionManager.registerAction(new BABYLON.ExecuteCodeAction(BABYLON.ActionManager.OnPickTrigger,
           function(){
-            console.log(mesh.position.x, mesh.position.y);
+            console.log(mesh.position.x, mesh.position.y, mesh.id);
           }
           ));
       }
@@ -142,67 +142,68 @@
       let arr_g = [];
       let arr_b = [];
       let arr_y = [];
-      for (let i=0; i<8; i++)
+      const cell_offset = 8;
+      for (let i=0; i<cell_offset; i++)
       {
-        arr_r[i] = BABYLON.MeshBuilder.CreateBox("box", {height: 0.1, width: 1, depth: 1});
+        arr_r[i] = BABYLON.MeshBuilder.CreateBox(i, {height: 0.1, width: 1, depth: 1});
         arr_r[i].position.x += (2.5 + i*1.2);
         arr_r[i].position.y = 0.2;
-        arr_r[i+8] = BABYLON.MeshBuilder.CreateBox("box", {height: 0.1, width: 1, depth: 1});
-        arr_r[i+8].position.x += (2.5 + i*1.2);
-        arr_r[i+8].position.z = 1.2;
-        arr_r[i+8].position.y = 0.2;
-        arr_r[i+16] = BABYLON.MeshBuilder.CreateBox("box", {height: 0.1, width: 1, depth: 1});
-        arr_r[i+16].position.x += (2.5 + i*1.2);
-        arr_r[i+16].position.z = -1.2;
-        arr_r[i+16].position.y = 0.2;
+        arr_r[i+cell_offset] = BABYLON.MeshBuilder.CreateBox(i+cell_offset, {height: 0.1, width: 1, depth: 1});
+        arr_r[i+cell_offset].position.x += (2.5 + i*1.2);
+        arr_r[i+cell_offset].position.z = 1.2;
+        arr_r[i+cell_offset].position.y = 0.2;
+        arr_r[i+cell_offset*2] = BABYLON.MeshBuilder.CreateBox(i+cell_offset*2, {height: 0.1, width: 1, depth: 1});
+        arr_r[i+cell_offset*2].position.x += (2.5 + i*1.2);
+        arr_r[i+cell_offset*2].position.z = -1.2;
+        arr_r[i+cell_offset*2].position.y = 0.2;
         makeOverOut(arr_r[i], new BABYLON.Color3.Red());
-        makeOverOut(arr_r[i+8], new BABYLON.Color3(0.8, 0.8, 0.8));
-        makeOverOut(arr_r[i+16], new BABYLON.Color3(0.8, 0.8, 0.8));
+        makeOverOut(arr_r[i+cell_offset], new BABYLON.Color3(0.8, 0.8, 0.8));
+        makeOverOut(arr_r[i+cell_offset*2], new BABYLON.Color3(0.8, 0.8, 0.8));
 
-        arr_g[i] = BABYLON.MeshBuilder.CreateBox("box", {height: 0.1, width: 1, depth: 1});
+        arr_g[i] = BABYLON.MeshBuilder.CreateBox(i + cell_offset*3, {height: 0.1, width: 1, depth: 1});
         arr_g[i].position.z += (2.5 + i*1.2);
         arr_g[i].position.y = 0.2;
-        arr_g[i+8] = BABYLON.MeshBuilder.CreateBox("box", {height: 0.1, width: 1, depth: 1});
-        arr_g[i+8].position.z += (2.5 + i*1.2);
-        arr_g[i+8].position.x = 1.2;
-        arr_g[i+8].position.y = 0.2;
-        arr_g[i+16] = BABYLON.MeshBuilder.CreateBox("box", {height: 0.1, width: 1, depth: 1});
-        arr_g[i+16].position.z += (2.5 + i*1.2);
-        arr_g[i+16].position.x = -1.2;
-        arr_g[i+16].position.y = 0.2;
+        arr_g[i+cell_offset] = BABYLON.MeshBuilder.CreateBox(i + cell_offset*4, {height: 0.1, width: 1, depth: 1});
+        arr_g[i+cell_offset].position.z += (2.5 + i*1.2);
+        arr_g[i+cell_offset].position.x = 1.2;
+        arr_g[i+cell_offset].position.y = 0.2;
+        arr_g[i+cell_offset*2] = BABYLON.MeshBuilder.CreateBox(i + cell_offset*5, {height: 0.1, width: 1, depth: 1});
+        arr_g[i+cell_offset*2].position.z += (2.5 + i*1.2);
+        arr_g[i+cell_offset*2].position.x = -1.2;
+        arr_g[i+cell_offset*2].position.y = 0.2;
         makeOverOut(arr_g[i], new BABYLON.Color3.Green());
-        makeOverOut(arr_g[i+8], new BABYLON.Color3(0.8, 0.8, 0.8));
-        makeOverOut(arr_g[i+16], new BABYLON.Color3(0.8, 0.8, 0.8));
+        makeOverOut(arr_g[i+cell_offset], new BABYLON.Color3(0.8, 0.8, 0.8));
+        makeOverOut(arr_g[i+cell_offset*2], new BABYLON.Color3(0.8, 0.8, 0.8));
 
-        arr_b[i] = BABYLON.MeshBuilder.CreateBox("box", {height: 0.1, width: 1, depth: 1});
+        arr_b[i] = BABYLON.MeshBuilder.CreateBox(i + cell_offset*6, {height: 0.1, width: 1, depth: 1});
         arr_b[i].position.x -= (2.5 + i*1.2);
         arr_b[i].position.y = 0.2;
-        arr_b[i+8] = BABYLON.MeshBuilder.CreateBox("box", {height: 0.1, width: 1, depth: 1});
-        arr_b[i+8].position.x -= (2.5 + i*1.2);
-        arr_b[i+8].position.z = 1.2;
-        arr_b[i+8].position.y = 0.2;
-        arr_b[i+16] = BABYLON.MeshBuilder.CreateBox("box", {height: 0.1, width: 1, depth: 1});
-        arr_b[i+16].position.x -= (2.5 + i*1.2);
-        arr_b[i+16].position.z = -1.2;
-        arr_b[i+16].position.y = 0.2;
+        arr_b[i+cell_offset] = BABYLON.MeshBuilder.CreateBox(i + cell_offset*7, {height: 0.1, width: 1, depth: 1});
+        arr_b[i+cell_offset].position.x -= (2.5 + i*1.2);
+        arr_b[i+cell_offset].position.z = 1.2;
+        arr_b[i+cell_offset].position.y = 0.2;
+        arr_b[i+cell_offset*2] = BABYLON.MeshBuilder.CreateBox(i + cell_offset*8, {height: 0.1, width: 1, depth: 1});
+        arr_b[i+cell_offset*2].position.x -= (2.5 + i*1.2);
+        arr_b[i+cell_offset*2].position.z = -1.2;
+        arr_b[i+cell_offset*2].position.y = 0.2;
         makeOverOut(arr_b[i], new BABYLON.Color3.Blue());
-        makeOverOut(arr_b[i+8], new BABYLON.Color3(0.8, 0.8, 0.8));
-        makeOverOut(arr_b[i+16], new BABYLON.Color3(0.8, 0.8, 0.8));
+        makeOverOut(arr_b[i+cell_offset], new BABYLON.Color3(0.8, 0.8, 0.8));
+        makeOverOut(arr_b[i+cell_offset*2], new BABYLON.Color3(0.8, 0.8, 0.8));
 
-        arr_y[i] = BABYLON.MeshBuilder.CreateBox("box", {height: 0.1, width: 1, depth: 1});
+        arr_y[i] = BABYLON.MeshBuilder.CreateBox(i + cell_offset*9, {height: 0.1, width: 1, depth: 1});
         arr_y[i].position.z -= (2.5 + i*1.2);
         arr_y[i].position.y = 0.2;
-        arr_y[i+8] = BABYLON.MeshBuilder.CreateBox("box", {height: 0.1, width: 1, depth: 1});
-        arr_y[i+8].position.z -= (2.5 + i*1.2);
-        arr_y[i+8].position.x = 1.2;
-        arr_y[i+8].position.y = 0.2;
-        arr_y[i+16] = BABYLON.MeshBuilder.CreateBox("box", {height: 0.1, width: 1, depth: 1});
-        arr_y[i+16].position.z -= (2.5 + i*1.2);
-        arr_y[i+16].position.x = -1.2;
-        arr_y[i+16].position.y = 0.2;
+        arr_y[i+cell_offset] = BABYLON.MeshBuilder.CreateBox(i + cell_offset*10, {height: 0.1, width: 1, depth: 1});
+        arr_y[i+cell_offset].position.z -= (2.5 + i*1.2);
+        arr_y[i+cell_offset].position.x = 1.2;
+        arr_y[i+cell_offset].position.y = 0.2;
+        arr_y[i+cell_offset*2] = BABYLON.MeshBuilder.CreateBox(i + cell_offset*11, {height: 0.1, width: 1, depth: 1});
+        arr_y[i+cell_offset*2].position.z -= (2.5 + i*1.2);
+        arr_y[i+cell_offset*2].position.x = -1.2;
+        arr_y[i+cell_offset*2].position.y = 0.2;
         makeOverOut(arr_y[i], new BABYLON.Color3.Yellow());
-        makeOverOut(arr_y[i+8], new BABYLON.Color3(0.8, 0.8, 0.8));
-        makeOverOut(arr_y[i+16], new BABYLON.Color3(0.8, 0.8, 0.8));
+        makeOverOut(arr_y[i+cell_offset], new BABYLON.Color3(0.8, 0.8, 0.8));
+        makeOverOut(arr_y[i+cell_offset*2], new BABYLON.Color3(0.8, 0.8, 0.8));
       }
 
 
