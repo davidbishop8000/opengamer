@@ -19,7 +19,7 @@
             align-items: center;
             flex-direction: column;
             background-color: rgb(34, 34, 34);
-            height: 400px;
+            height: 300px;
             width: 300px;
             margin-top: 10%;
             border-radius: 10px;
@@ -32,7 +32,7 @@
         }
  
         .image h2 {
-            color: rgb(2, 149, 27);
+            color: rgb(7, 207, 40);
             font-size: 30px;
             font-family: sans-serif;
             margin-bottom: 50px;
@@ -51,13 +51,16 @@
         }
  
         .submit_btn {
-            height: 30px;
-            width: 80px;
+            font-family: sans-serif;
+            font-size: 20px;
+            height: 50px;
+            width: 160px;
             border-radius: 100px;
             border: none;
             outline: none;
             background-color: rgb(0, 179, 95);
             margin-top: 15px;
+            margin-bottom: 30px;
         }
  
         .submit_btn:hover {
@@ -70,32 +73,31 @@
         .dropdown_button {
             background-color: #ffffff;
             color: rgb(72, 67, 67);
-
-
             font-size: 16px;
             border: none;
             cursor: pointer;
             width: 200px;
-            font-family: montserrat;
-            border: 1px solid #ffffff;
-
             font-family: sans-serif;
             margin-bottom: 20px;
             height: 30px;
             border-radius: 100px;
-            border: none;
             text-align: center;
             outline: none;
         }
- 
         
         .c_color {
             display: none;
             position: absolute;
-            background-color: #f1f1f1;
+            background-color: #ffffff;
             min-width: 200px;
             box-shadow: 0px 8px 16px 0px rgba(255, 230, 230, 0.2);
-            z-index: 1;            
+            z-index: 1;
+            font-family: sans-serif;
+            margin-bottom: 2px;
+            height: 20px;
+            border-radius: 100px;
+            text-align: center;
+            outline: none;
         }
  
         .c_color li {
@@ -104,21 +106,32 @@
             text-decoration: none;
             display: block;
             list-style: none;
-            background-color: rgb(47, 47, 47);
-            font-family: montserrat;
-            border: 1px solid white;
+            background-color: rgb(255, 255, 255);
+            border: 1px solid rgb(71, 69, 69);
+            font-family: sans-serif;
+            margin-bottom: 2px;
+            height: 20px;
+            border-radius: 100px;
+            text-align: center;
         }
  
         .c_color li a {
             text-decoration: none;
-            color: white;
-            display: block;
-            padding: 10px;
+            color: rgb(38, 35, 35);
         }
  
-        .c_color li:hover {
-            background-color: #489055;
-            color: rgb(9, 0, 0);
+        .c_color li.c_color_r:hover {
+            background-color: #f11e1e;
+        }
+        .c_color li.c_color_g:hover {
+            background-color: #13ab08;
+        }
+        .c_color li.c_color_b:hover {
+            background-color: #3152c9;
+            color: white;
+        }
+        .c_color li.c_color_y:hover {
+            background-color: #e6f021;          
         }
 
     </style>
@@ -127,7 +140,7 @@
 <body>
     <div class="main">
         <div class="image">
-            <h2>Welcome</h2>
+            <h2>&#129472; Welcome &#129472;</h2>
         </div>
         <div class="username">
             <input type="text"
@@ -135,27 +148,26 @@
                    placeholder="Name">
         </div>
 
-        <div class="dropdown_list">
+        <div>
             <button class="dropdown_button"
                 onclick="show_list()">
                 Choose color
             </button>
  
             <div id="c_color_id" class="c_color">
-                <li><a href="">Machine learning</a></li>
-                <li><a href="">Data science</a></li>
-                <li><a href="">Data analysis</a></li>
-                <li><a href="">Data mining</a></li>
-                <li><a href="">Data warehousing</a></li>
+                <li class="c_color_r"><a href="">Red</a></li>
+                <li class="c_color_g"><a href="">Green</a></li>
+                <li class="c_color_b">Blue</li>
+                <li class="c_color_y"><a href="">Yellow</a></li>
             </div>
         </div>
 
         <div class="pass">
-            <input id="pass"
+            <input id="pass" style="display: none"
                    type="password"
                    name="pass"
                    placeholder="Enter Password">
-            <input id="confirm_pass"
+            <input id="confirm_pass" style="display: none"
                    type="password"
                    name="confirm_pass"
                    placeholder="Confirm Password" required
@@ -166,7 +178,7 @@
             <button id="create"
                     class="submit_btn"
                     onclick="wrong_pass_alert()">
-                Cheesy
+                Cheesy &#129472;
             </button>
         </div>
     </div>
