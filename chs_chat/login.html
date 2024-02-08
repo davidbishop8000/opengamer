@@ -1,0 +1,355 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="utf-8">
+  <link rel="shortcut icon"
+    href="data:image/x-icon;base64, AAABAAEAEBAQAAEABAAoAQAAFgAAACgAAAAQAAAAIAAAAAEABAAAAAAAgAAAAAAAAAAAAAAAEAAAAAAAAAAAAAAABAGFAAAA/wAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAQEBAgACACAQEBACACACAAEBAQICAAAgEBAQAiAAAgAAAAACAAAAICIiIAIAAAIAAAACAgAAICAAAAICIAAgAgAAAgICACACAAAgAgAgIAIAIgAAAAAAAAIAAAEAERAQIAAAAQAQABAgAAABAREAECAAAAEQEAAQAiIgAQARERGq7QAAVtsAAKq9AABWewAA/v0AAAb7AAD69QAA+nYAAPq2AAD21gAAz/8AAL7FAAB+3QAAfo0AAH5dAACGwAAA"
+    type="image/x-icon" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width,initial-scale=1.0">
+  <title>Shuttle control</title>
+  <style>
+    h1 {
+      color: rgb(7, 207, 40);
+      font-size: 30px;
+      font-family: sans-serif;
+      margin-bottom: 30px;
+    }
+
+    h2 {
+      color: #adadad;
+      border-radius: 0.5em;
+      margin: 3px;
+      font-size: 60%;
+      padding: 0.2em 0.2em;
+      background: #676767;
+      text-align: center
+    }
+
+    footer {
+      background-color: #676767;
+      color: #ebebeb;
+      margin: 3px;
+      text-align: center;
+      padding: 0.3em 0.3em;
+      border-radius: 0.375em;
+      font-size: 60%;
+      text-align: center;
+    }
+
+    body {
+      background-color: #4a4a4a;
+    }
+
+    input, button, select,
+    .dropdown_button {
+      width: 70%;
+      padding: 10px;
+      background-color: #e8e8e8;
+      color: #3b3b3b;
+      text-align: center;
+      font-size: large;
+      margin-left: auto;
+      margin-right: auto;
+      margin-bottom: 2px;
+      height: 50px;
+      border-radius: 100px;
+      border: none;
+      outline: none;
+      box-shadow: 0 10px #101010;
+    }
+    input{box-sizing:border-box}
+
+    input::placeholder {
+      color: #707070;
+    }
+    
+    #dropdiv {
+      display: grid;
+      grid-template-columns: 1fr;
+      grid-gap: 0px;
+      height: 100%;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .main {
+      background-color: rgb(34, 34, 34);
+      width: 90%;
+      margin-top: 30%;
+      margin-bottom: 10%;
+      margin-left: auto;
+      margin-right: auto;
+      box-shadow: 2px 4px 6px rgb(0, 0, 0);
+      border: 2px solid black;
+      border-radius: 10px;
+      display: grid;
+      grid-template-columns: 1fr;
+      grid-gap: 0px;
+      height: 100%;
+      align-items: center;
+      justify-content: center;
+    }
+
+    #welcome {
+      width: 100%;
+      height: 50px;
+      margin-bottom: 30px;
+      padding: 10px;
+      color: rgb(7, 207, 40);
+      text-align: center;
+      font-size: large;
+    }
+
+    .square {
+      background-color: rgb(34, 34, 34);
+      width: 60%;
+      margin: auto;
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr 1fr;
+      grid-template-rows: 1fr;
+      grid-gap: 10px;
+      height: 100%;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .cycle {
+      width: 50px;
+      height: 50px;
+      border-radius: 50%;
+    }
+    .square_r {
+      background: #ff0000;
+      border: 4px solid rgb(255, 255, 255);
+    }
+
+    .square_g {
+      background: #09ff00;
+    }
+
+    .square_b {
+      background: #0008ff;
+    }
+
+    .square_y {
+      background: #f2ff00;
+    }
+
+    .c_color {
+      display: none;
+      position: absolute;
+      background-color: #ffffff;
+      min-width: 200px;
+      box-shadow: 0px 8px 16px 0px rgba(255, 230, 230, 0.2);
+      z-index: 1;
+      font-family: sans-serif;
+      font-size: large;
+      margin-bottom: 2px;
+      height: 20px;
+      border-radius: 100px;
+      text-align: center;
+      outline: none;
+    }
+
+    .c_color li {
+      color: black;
+      padding: 12px 16px;
+      text-decoration: none;
+      display: block;
+      list-style: none;
+      background-color: rgb(255, 255, 255);
+      border: 1px solid rgb(0, 0, 0);
+      font-family: sans-serif;
+      font-size: large;
+      margin-bottom: 2px;
+      height: 20px;
+      border-radius: 100px;
+      text-align: center;
+    }
+
+    .c_color li a {
+      text-decoration: none;
+      color: rgb(38, 35, 35);
+    }
+
+    .c_color li.c_color_r:hover {
+      background-color: #f11e1e;
+    }
+
+    .c_color li.c_color_g:hover {
+      background-color: #13ab08;
+    }
+
+    .c_color li.c_color_b:hover {
+      background-color: #3152c9;
+      color: white;
+    }
+
+    .c_color li.c_color_y:hover {
+      background-color: #e6f021;
+    }
+
+    .grid-container {
+      display: grid;
+      grid-template-columns: 410px;
+      grid-gap: 0px;
+      height: 100%;
+      align-items: center;
+      justify-content: center;
+    }
+    * {
+      font-family: "sans-serif";
+    }
+  </style>
+</head>
+
+<body>
+  <h2 id="conn">The future is what will happen in the time period after the present.</h2>
+  <div class="grid-container">
+    <div class="main">
+      <div id="welcome">
+        <h1>&#129472; Welcome &#129472;</h1>
+      </div>
+      <input type="text" id="username" name="username" placeholder="Name">
+      <div id="c_color_" class="square">
+        <div id="cycle_r" class="cycle square_r"></div>
+        <div id="cycle_g" class="cycle square_g"></div>
+        <div id="cycle_b" class="cycle square_b"></div>
+        <div id="cycle_y" class="cycle square_y"></div>
+      </div>
+      <button id="connect" class="submit_btn" onclick="wrong_alert()">
+        Cheesy &#129472;
+      </button>
+    </div>
+  </div>
+  <script>
+    var button = document.querySelectorAll(('button'));
+    let timer_conn = setTimeout(offline, 50000);
+    function offline() {
+      document.getElementById("conn").style.backgroundColor = "#810000";
+      document.getElementById("conn").innerHTML = "offline";
+    }
+    const btn = document.querySelector('#btn');
+    const input = document.querySelector('#input');
+    btn.addEventListener('click', sendGet);
+    async function sendGet() {
+      if (input.value) {
+        try {
+          input.classList.remove('error');
+          const response = await fetch(`control?pallet_quant=${input.value}`);
+          if (response.ok) {
+            const result = await response.json();
+            console.log(`control?pallet_quant=${input.value}`);
+          }
+        } catch (e) {
+          console.log(e);
+        }
+      } else {
+        input.classList.add('error');
+      }
+    }
+    if (!!window.EventSource) {
+      var source = new EventSource('/events');
+      source.addEventListener('open', function (e) {
+        console.log("Events Connected");
+      }, false);
+      source.addEventListener('error', function (e) {
+        if (e.target.readyState != EventSource.OPEN) {
+          console.log("Events Disconnected");
+        }
+      }, false);
+      source.addEventListener('message', function (e) {
+        console.log("message", e.data);
+      }, false);
+      source.addEventListener('status', function (e) {
+        clearTimeout(timer_conn);
+        timer_conn = setTimeout(offline, 5000);
+        document.getElementById("conn").style.backgroundColor = "blue";
+        document.getElementById("conn").innerHTML = "online";
+        console.log("status_data ", e.data);
+        //const json = e.data.json();
+        const obj = JSON.parse(e.data);
+        console.log("status_parse ", obj.charge, obj.status, obj.signal, obj.mode, obj.quant, obj.downl, obj.size, obj.err, obj.warn);
+        //document.getElementById("charge").innerHTML = e.data;
+        document.getElementById("charge").innerHTML = obj.charge + "%";
+        let str_mode;
+        if (obj.mode == 1) str_mode = "FIFO";
+        else str_mode = "LIFO";
+        document.getElementById("mode").innerHTML = str_mode;
+        document.getElementById("signal").innerHTML = obj.signal;
+        document.getElementById("status").innerHTML = obj.status;
+        if (obj.status == "Выгрузка" && obj.downl > 0) document.getElementById("input").value = obj.downl;
+        if (obj.err[0] == "Нет" && obj.warn[0] == "Нет") document.getElementById("block_errors").style.display = 'none';
+        else {
+          document.getElementById("block_errors").style.display = 'block';
+          if (obj.err[0] != "Нет") {
+            let er = "";
+            for (let i = 0; i < obj.err.length; i++) {
+              er += String(obj.err[i]);
+              if (i < obj.err.length - 1) er += ", ";
+            }
+            document.getElementById("errors").innerHTML = er;
+          }
+          else document.getElementById("errors").innerHTML = "";
+          if (obj.warn[0] != "Нет") {
+            let wr = "";
+            for (let i = 0; i < obj.warn.length; i++) {
+              wr += String(obj.warn[i]);
+              if (i < obj.warn.length - 1) wr += ", ";
+            }
+            document.getElementById("warnings").innerHTML = wr;
+          }
+          else document.getElementById("warnings").innerHTML = "";
+        }
+      }, false);
+    }
+
+
+    let user_color = "";
+    function wrong_alert() {
+      let username = document.getElementById('username').value;
+      if (username != "" && user_color != "") {
+        console.log(`control?name=${username}&color=${user_color}`);
+        window.location.replace("/game.html");
+      } else {
+        alert("Please fill all the fields");
+      }
+    }
+
+    function show_list() {
+      var c_color = document.getElementById("c_color_id");
+
+      if (c_color.style.display == "block") {
+        c_color.style.display = "none";
+      } else {
+        c_color.style.display = "block";
+      }
+    }
+    function getEventTarget(e) {
+      e = e || window.event;
+      return e.target || e.srcElement;
+    }
+
+    let ul = document.getElementById('c_color_id');
+    ul.onclick = function (event) {
+      var target = getEventTarget(event);
+      let dropdown_button = document.getElementById('dropdown_button');
+      user_color = target.innerHTML;
+      dropdown_button.innerHTML = user_color;
+      dropdown_button.style.backgroundColor = `${user_color}`;
+      console.log(`${user_color}`);
+    };
+    window.onclick = function (event) {
+      if (!event.target.matches('.dropdown_button')) {
+        document.getElementById('c_color_id')
+          .style.display = "none";
+      }
+    }
+
+  </script>
+  <!---<footer>&copy;skynet</footer>--->
+</body>
+
+</html>

@@ -1,0 +1,235 @@
+<!DOCTYPE HTML><html><head>
+  <meta charset="utf-8">
+  <title>Diagnostics</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <style>
+    * {font-family: "Lucida Console"}
+    body{
+      display: grid;
+      grid-template-columns: 1fr;
+      background-color: #4a4a4a;
+      color: white;
+    }
+    .cell-data{
+      background-color: #666666;
+      color: white;
+      text-align: center;
+      line-height: 1.5em;
+    }
+    h3{text-align:center;}
+    .item-cell{
+      margin-top: 2px;
+      margin-left: 5px;
+      margin-right: 5px;
+      margin-bottom: 2px;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      padding: 1px;
+      border: 2px solid black;
+      border-radius: 10px;
+    }
+    p{
+      margin: 5px auto auto 2px;
+      padding: 1px;
+      padding-bottom: 4px;
+      color: white;
+    }
+    span{margin-right: 20px;}
+    canvas{
+      padding-left: 0;
+      padding-right: 0;
+      margin-left: auto;
+      margin-right: auto;
+      display: block;
+      width: 320px;
+      height: 240px;
+    }
+  </style></head><body>
+  <h3>Диагностика</h3>
+  <canvas id="canvas"></canvas>
+  <div class="item-cell">
+    <p>current_status: </p>
+    <p><span id="g0">-</span></p>
+    <p>rc_status: </p>
+    <p><span id="g1">-</span></p>
+    <p>current_action_block: </p>
+    <p><span id="g2">-</span></p>
+    <p>current_state: </p>
+    <p><span id="g3">-</span></p>
+    <p>current_move_comm: </p>
+    <p><span id="g4">-</span></p>
+    <p>current_lift_comm: </p>
+    <p><span id="g5">-</span></p>
+    <p>current_pallet_plank: </p>
+    <p><span id="g6">-</span></p>
+    <p>pall_size_detected: </p>
+    <p><span id="g7">-</span></p>
+  </div>
+  <div class="item-cell">
+    <p>capacity: </p>
+    <p><span id="m0">-</span></p>
+    <p>pall_quant: </p>
+    <p><span id="m1">-</span></p>
+    <p>pall_downl_quant: </p>
+    <p><span id="m2">-</span></p>
+    <p>send_status: </p>
+    <p><span id="m3">-</span></p>
+    <p>beeper: </p>
+    <p><span id="m4">-</span></p>
+    <p>flash_blocked: </p>
+    <p><span id="m5">-</span></p>
+    <p>battery_low: </p>
+    <p><span id="m6">-</span></p>
+    <p>cs_err: </p>
+    <p><span id="m7">-</span></p>
+    <p>fifo_lifo: </p>
+    <p><span id="m8">-</span></p>
+    <p>invert_mode: </p>
+    <p><span id="m9">-</span></p>
+    <p>enc_idle: </p>
+    <p><span id="m10">-</span></p>
+  </div>
+  <div class="item-cell">
+    <p>Мотор 1: </p>
+    <p style="color: #ff9100"><span id="motor1">-</span></p>
+    <p>Мотор 2: </p>
+    <p style="color: #ff9100"><span id="motor2">-</span></p>
+  </div>
+  <script>
+    var canvas = document.getElementById("canvas");
+    var ctx = canvas.getContext('2d');
+    ctx.strokeStyle = '#5f5f5f';
+    ctx.strokeRect(10, 10, canvas.width - 20, 120);
+    ctx.lineWidth = 2;
+    ctx.strokeStyle = '#000000';
+    ctx.strokeRect(50, 30, canvas.width - 100, 80);
+    const C_ON = "lime";
+    const C_OFF = "red";
+    var n_status = 0;
+    var back_limit_sw = 1;
+    var back_speeddown_sw = 1;
+    var forw_limit_sw = 1;
+    var forw_speeddown_sw = 1;
+    var back_pallet_sw = 0;
+    var back_pallet2000_sw = 0;
+    var forw_pallet_sw = 0;
+    var forw_pallet2000_sw = 0;
+    var back_plank_sw = 0;
+    var forw_plank_sw = 0;
+    var canal_sw = 0;
+    var up_limit_sw = 0;
+    var down_limit_sw = 0;
+    var back_plank_sw1 = 0;
+    var back_plank_sw2 = 0;
+    var forw_plank_sw1 = 0;
+    var forw_plank_sw2 = 0;
+    const dr_err = ["disable", "over_voltage", "hard_over_curr", "epprom_err", "under_voltage", "brake", "soft_over_curr", "control_mode_fail", "phase_line", "mix_mode_fail", "over_temp_driver", "hall_fail", "curr_sens_fail", "over_temp_motor", "can_disconn", "rs232_disconn"];
+    function drawSens(x0, y0, state) {
+      if (state) ctx.fillStyle = C_ON;
+      else ctx.fillStyle = C_OFF;
+      ctx.fillRect(x0, y0, 10, 10);
+    }
+    function drawStatus(state) {
+      ctx.clearRect(240, 118, 48, 10);
+      ctx.font = "10px Lucida Console";
+      if (state) {
+        ctx.fillStyle = C_ON;
+        ctx.fillText('online', 244, 127);
+      }
+      else {
+        ctx.fillStyle = C_OFF;
+        ctx.fillText('offline', 244, 127);
+      }
+    }
+    function reDraw() {
+      drawSens(60, 40, back_plank_sw1);
+      drawSens(60, 90, back_plank_sw2);
+      drawSens(canvas.width - 70, 40, forw_plank_sw1);
+      drawSens(canvas.width - 70, 90, forw_plank_sw2);
+      drawSens(20, 100, !back_speeddown_sw);
+      drawSens(35, 100, !back_limit_sw);
+      drawSens(canvas.width - 30, 30, !forw_speeddown_sw);
+      drawSens(canvas.width - 45, 30, !forw_limit_sw);
+      drawSens(20, 65, back_pallet2000_sw);
+      drawSens(35, 65, back_pallet_sw);
+      drawSens(canvas.width - 30, 65, forw_pallet2000_sw);
+      drawSens(canvas.width - 45, 65, forw_pallet_sw);
+      drawSens(100, 115, canal_sw);
+      ctx.font = "25px Lucida Console";
+      ctx.clearRect(135, 40, 24, 60);
+      if (up_limit_sw) ctx.fillStyle = C_ON;
+      else ctx.fillStyle = C_OFF;
+      ctx.fillText('⇧', 140, 60);
+      if (down_limit_sw) ctx.fillStyle = C_ON;
+      else ctx.fillStyle = C_OFF;
+      ctx.fillText('⇩', 140, 90);
+      drawStatus(n_status);
+    }
+    function getBit(number, bitPosition) {
+      return (number & (1 << bitPosition)) === 0 ? 0 : 1;
+    }
+    let gg = [];
+    let mm = [];
+    for (let i = 0; i <= 7; i++) {
+      gg[i] = document.getElementById(`g${i}`);
+    }
+    for (let i = 0; i <= 10; i++) {
+      mm[i] = document.getElementById(`m${i}`);
+    }
+    let motor1 = document.getElementById("motor1");
+    let motor2 = document.getElementById("motor2");
+    setInterval(async () => {
+      try {
+        const response = await fetch(`diag`)
+        if (response.ok) {
+          n_status = 1;
+          const data = await response.json();
+          for (let i=0;i<=7;i++)
+          {
+            gg[i].innerHTML = data[`g${i}`];
+          }
+          for (let i=0;i<=10;i++)
+          {
+            mm[i].innerHTML = data[`m${i}`];
+          }
+          back_limit_sw = data.s0;
+          back_speeddown_sw = data.s1;
+          forw_limit_sw = data.s2;
+          forw_speeddown_sw = data.s3;
+          back_pallet_sw = data.s4;
+          back_pallet2000_sw = data.s5;
+          forw_pallet_sw = data.s6;
+          forw_pallet2000_sw = data.s7;
+          back_plank_sw = data.s8;
+          forw_plank_sw = data.s9;
+          canal_sw = data.s10;
+          up_limit_sw = data.s11;
+          down_limit_sw = data.s12;
+          back_plank_sw1 = data.s13;
+          back_plank_sw2 = data.s14;
+          forw_plank_sw1 = data.s15;
+          forw_plank_sw2 = data.s16;          
+          let m1_err = "";
+          let m2_err = "";
+          for (let i=0;i<=15;i++)
+          {
+            if(getBit(data.dr1, i))
+            {
+              m1_err = m1_err+dr_err[i]+"<br>";
+            }
+            if(getBit(data.dr2, i))
+            {
+              m2_err = m2_err+dr_err[i]+"<br>";
+            }
+          }
+          motor1.innerHTML = m1_err;
+          motor2.innerHTML = m2_err;
+          //console.log(data);
+        }
+      } catch (e) {
+        n_status = 0;
+        console.log(e);
+      }
+      reDraw();
+    }, 310);
+  </script></body></html>
