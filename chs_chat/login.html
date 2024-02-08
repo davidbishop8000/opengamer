@@ -1,6 +1,5 @@
 <!DOCTYPE html>
 <html>
-
 <head>
   <meta charset="utf-8">
   <link rel="shortcut icon"
@@ -8,8 +7,11 @@
     type="image/x-icon" />
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width,initial-scale=1.0">
-  <title>Shuttle control</title>
+  <title>Cheesy Parcheesi board game</title>
   <style>
+    html {
+      height: 100%;
+    }
     h1 {
       color: rgb(7, 207, 40);
       font-size: 30px;
@@ -40,13 +42,16 @@
 
     body {
       background-color: #4a4a4a;
+      min-height: 100%;
+      display: grid;
+      grid-template-rows: auto 1fr auto;
     }
 
     input, button, select,
     .dropdown_button {
       width: 70%;
       padding: 10px;
-      background-color: #e8e8e8;
+      background-color: rgb(232, 232, 232);
       color: #3b3b3b;
       text-align: center;
       font-size: large;
@@ -65,17 +70,30 @@
       color: #707070;
     }
     
-    #dropdiv {
-      display: grid;
-      grid-template-columns: 1fr;
-      grid-gap: 0px;
-      height: 100%;
-      align-items: center;
-      justify-content: center;
+    #connect {
+      background-color: rgb(1, 97, 52);
+      color: #b8d60d;
+      font-weight: bold;
+      font-size: x-large;
+    }
+
+    #connect:hover {
+	    background-color: rgb(2, 148, 80);
+      color: #d9ff00;
+    }
+
+    #connect:active { 
+      background-color: red;
+      transform: scale(0.9);
+      background-color: rgb(3, 121, 66);
+      color: #b8d60d;
+      font-weight: bold;
+      font-size: larger;
+      box-shadow: none;
     }
 
     .main {
-      background-color: rgb(34, 34, 34);
+      background-color: rgb(41, 41, 41);
       width: 90%;
       margin-top: 30%;
       margin-bottom: 10%;
@@ -102,8 +120,17 @@
       font-size: large;
     }
 
+    #wrong {
+      width: auto;
+      height: auto;
+      margin: auto;
+      color: rgb(199, 0, 0);
+      text-align: center;
+      font-size: normal;
+      display: block;
+    }
+
     .square {
-      background-color: rgb(34, 34, 34);
       width: 60%;
       margin: auto;
       display: grid;
@@ -119,10 +146,10 @@
       width: 50px;
       height: 50px;
       border-radius: 50%;
+      border: 4px solid rgb(41, 41, 41);
     }
     .square_r {
       background: #ff0000;
-      border: 4px solid rgb(255, 255, 255);
     }
 
     .square_g {
@@ -137,68 +164,19 @@
       background: #f2ff00;
     }
 
-    .c_color {
-      display: none;
-      position: absolute;
-      background-color: #ffffff;
-      min-width: 200px;
-      box-shadow: 0px 8px 16px 0px rgba(255, 230, 230, 0.2);
-      z-index: 1;
-      font-family: sans-serif;
-      font-size: large;
-      margin-bottom: 2px;
-      height: 20px;
-      border-radius: 100px;
-      text-align: center;
-      outline: none;
-    }
-
-    .c_color li {
-      color: black;
-      padding: 12px 16px;
-      text-decoration: none;
-      display: block;
-      list-style: none;
-      background-color: rgb(255, 255, 255);
-      border: 1px solid rgb(0, 0, 0);
-      font-family: sans-serif;
-      font-size: large;
-      margin-bottom: 2px;
-      height: 20px;
-      border-radius: 100px;
-      text-align: center;
-    }
-
-    .c_color li a {
-      text-decoration: none;
-      color: rgb(38, 35, 35);
-    }
-
-    .c_color li.c_color_r:hover {
-      background-color: #f11e1e;
-    }
-
-    .c_color li.c_color_g:hover {
-      background-color: #13ab08;
-    }
-
-    .c_color li.c_color_b:hover {
-      background-color: #3152c9;
-      color: white;
-    }
-
-    .c_color li.c_color_y:hover {
-      background-color: #e6f021;
-    }
-
     .grid-container {
       display: grid;
       grid-template-columns: 410px;
+      grid-template-rows: 410px;
       grid-gap: 0px;
-      height: 100%;
       align-items: center;
       justify-content: center;
     }
+
+    ::-webkit-scrollbar {
+      display: none;
+    }
+    
     * {
       font-family: "sans-serif";
     }
@@ -213,143 +191,45 @@
         <h1>&#129472; Welcome &#129472;</h1>
       </div>
       <input type="text" id="username" name="username" placeholder="Name">
-      <div id="c_color_" class="square">
-        <div id="cycle_r" class="cycle square_r"></div>
-        <div id="cycle_g" class="cycle square_g"></div>
-        <div id="cycle_b" class="cycle square_b"></div>
-        <div id="cycle_y" class="cycle square_y"></div>
+      <div class="square">
+        <div id="red" class="cycle square_r" onclick="setColor('red')"></div>
+        <div id="green" class="cycle square_g" onclick="setColor('green')"></div>
+        <div id="blue" class="cycle square_b" onclick="setColor('blue')"></div>
+        <div id="yellow" class="cycle square_y" onclick="setColor('yellow')"></div>
       </div>
-      <button id="connect" class="submit_btn" onclick="wrong_alert()">
+      <span id="wrong"></span>
+      <button id="connect" class="submit_btn" onclick="wrong_name()">
         Cheesy &#129472;
       </button>
     </div>
   </div>
   <script>
-    var button = document.querySelectorAll(('button'));
-    let timer_conn = setTimeout(offline, 50000);
-    function offline() {
-      document.getElementById("conn").style.backgroundColor = "#810000";
-      document.getElementById("conn").innerHTML = "offline";
-    }
-    const btn = document.querySelector('#btn');
-    const input = document.querySelector('#input');
-    btn.addEventListener('click', sendGet);
-    async function sendGet() {
-      if (input.value) {
-        try {
-          input.classList.remove('error');
-          const response = await fetch(`control?pallet_quant=${input.value}`);
-          if (response.ok) {
-            const result = await response.json();
-            console.log(`control?pallet_quant=${input.value}`);
-          }
-        } catch (e) {
-          console.log(e);
-        }
-      } else {
-        input.classList.add('error');
-      }
-    }
-    if (!!window.EventSource) {
-      var source = new EventSource('/events');
-      source.addEventListener('open', function (e) {
-        console.log("Events Connected");
-      }, false);
-      source.addEventListener('error', function (e) {
-        if (e.target.readyState != EventSource.OPEN) {
-          console.log("Events Disconnected");
-        }
-      }, false);
-      source.addEventListener('message', function (e) {
-        console.log("message", e.data);
-      }, false);
-      source.addEventListener('status', function (e) {
-        clearTimeout(timer_conn);
-        timer_conn = setTimeout(offline, 5000);
-        document.getElementById("conn").style.backgroundColor = "blue";
-        document.getElementById("conn").innerHTML = "online";
-        console.log("status_data ", e.data);
-        //const json = e.data.json();
-        const obj = JSON.parse(e.data);
-        console.log("status_parse ", obj.charge, obj.status, obj.signal, obj.mode, obj.quant, obj.downl, obj.size, obj.err, obj.warn);
-        //document.getElementById("charge").innerHTML = e.data;
-        document.getElementById("charge").innerHTML = obj.charge + "%";
-        let str_mode;
-        if (obj.mode == 1) str_mode = "FIFO";
-        else str_mode = "LIFO";
-        document.getElementById("mode").innerHTML = str_mode;
-        document.getElementById("signal").innerHTML = obj.signal;
-        document.getElementById("status").innerHTML = obj.status;
-        if (obj.status == "Выгрузка" && obj.downl > 0) document.getElementById("input").value = obj.downl;
-        if (obj.err[0] == "Нет" && obj.warn[0] == "Нет") document.getElementById("block_errors").style.display = 'none';
-        else {
-          document.getElementById("block_errors").style.display = 'block';
-          if (obj.err[0] != "Нет") {
-            let er = "";
-            for (let i = 0; i < obj.err.length; i++) {
-              er += String(obj.err[i]);
-              if (i < obj.err.length - 1) er += ", ";
-            }
-            document.getElementById("errors").innerHTML = er;
-          }
-          else document.getElementById("errors").innerHTML = "";
-          if (obj.warn[0] != "Нет") {
-            let wr = "";
-            for (let i = 0; i < obj.warn.length; i++) {
-              wr += String(obj.warn[i]);
-              if (i < obj.warn.length - 1) wr += ", ";
-            }
-            document.getElementById("warnings").innerHTML = wr;
-          }
-          else document.getElementById("warnings").innerHTML = "";
-        }
-      }, false);
-    }
-
-
     let user_color = "";
-    function wrong_alert() {
+    function wrong_name() {
       let username = document.getElementById('username').value;
+      let wrong = document.getElementById('wrong');
       if (username != "" && user_color != "") {
-        console.log(`control?name=${username}&color=${user_color}`);
-        window.location.replace("/game.html");
+        console.log(`?name=${username}&color=${user_color}`);
+        window.location.replace(`game.html?name=${username}&color=${user_color}`);
+      } else if (username != "") {
+        wrong.innerHTML = "Choose any color!";
       } else {
-        alert("Please fill all the fields");
+        wrong.innerHTML = "Enter your name!";
       }
     }
 
-    function show_list() {
-      var c_color = document.getElementById("c_color_id");
-
-      if (c_color.style.display == "block") {
-        c_color.style.display = "none";
-      } else {
-        c_color.style.display = "block";
-      }
+    function setColor(color) {
+      const param = '4px solid rgb(41, 41, 41)';
+      document.getElementById('red').style.border = param;
+      document.getElementById('green').style.border = param;
+      document.getElementById('blue').style.border = param;
+      document.getElementById('yellow').style.border = param;
+      document.getElementById(color).style.border = '4px solid white';
+      user_color = color;
+      console.log(color);
     }
-    function getEventTarget(e) {
-      e = e || window.event;
-      return e.target || e.srcElement;
-    }
-
-    let ul = document.getElementById('c_color_id');
-    ul.onclick = function (event) {
-      var target = getEventTarget(event);
-      let dropdown_button = document.getElementById('dropdown_button');
-      user_color = target.innerHTML;
-      dropdown_button.innerHTML = user_color;
-      dropdown_button.style.backgroundColor = `${user_color}`;
-      console.log(`${user_color}`);
-    };
-    window.onclick = function (event) {
-      if (!event.target.matches('.dropdown_button')) {
-        document.getElementById('c_color_id')
-          .style.display = "none";
-      }
-    }
-
   </script>
-  <!---<footer>&copy;skynet</footer>--->
+  <footer>&copy;skynet</footer>
 </body>
 
 </html>
