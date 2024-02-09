@@ -1,15 +1,4 @@
-<!DOCTYPE html>
-<html>
-<head>
-  <meta charset="utf-8">
-  <link rel="shortcut icon"
-    href="data:image/x-icon;base64, AAABAAEAEBAQAAEABAAoAQAAFgAAACgAAAAQAAAAIAAAAAEABAAAAAAAgAAAAAAAAAAAAAAAEAAAAAAAAAAAAAAABAGFAAAA/wAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAQEBAgACACAQEBACACACAAEBAQICAAAgEBAQAiAAAgAAAAACAAAAICIiIAIAAAIAAAACAgAAICAAAAICIAAgAgAAAgICACACAAAgAgAgIAIAIgAAAAAAAAIAAAEAERAQIAAAAQAQABAgAAABAREAECAAAAEQEAAQAiIgAQARERGq7QAAVtsAAKq9AABWewAA/v0AAAb7AAD69QAA+nYAAPq2AAD21gAAz/8AAL7FAAB+3QAAfo0AAH5dAACGwAAA"
-    type="image/x-icon" />
-  <meta http-equiv="X-UA-Compatible" content="IE=edge">
-  <meta name="viewport" content="width=device-width,initial-scale=1.0">
-  <title>Cheesy Parcheesi board game</title>
-  <style>
-    html {
+html {
       height: 100%;
     }
     h1 {
@@ -62,9 +51,10 @@
       border-radius: 100px;
       border: none;
       outline: none;
-      box-shadow: 0 10px #101010;
     }
-    input{box-sizing:border-box}
+    input {
+      box-sizing:border-box;
+    }
 
     input::placeholder {
       color: #707070;
@@ -75,6 +65,7 @@
       color: #b8d60d;
       font-weight: bold;
       font-size: x-large;
+      box-shadow: 10px 10px 10px #101010;
     }
 
     #connect:hover {
@@ -147,6 +138,7 @@
       height: 50px;
       border-radius: 50%;
       border: 4px solid rgb(41, 41, 41);
+      box-shadow: 5px 5px 5px #101010;
     }
     .square_r {
       background: #ff0000;
@@ -180,56 +172,3 @@
     * {
       font-family: "sans-serif";
     }
-  </style>
-</head>
-
-<body>
-  <h2 id="conn">The future is what will happen in the time period after the present.</h2>
-  <div class="grid-container">
-    <div class="main">
-      <div id="welcome">
-        <h1>&#129472; Welcome &#129472;</h1>
-      </div>
-      <input type="text" id="username" name="username" placeholder="Name">
-      <div class="square">
-        <div id="red" class="cycle square_r" onclick="setColor('red')"></div>
-        <div id="green" class="cycle square_g" onclick="setColor('green')"></div>
-        <div id="blue" class="cycle square_b" onclick="setColor('blue')"></div>
-        <div id="yellow" class="cycle square_y" onclick="setColor('yellow')"></div>
-      </div>
-      <span id="wrong"></span>
-      <button id="connect" class="submit_btn" onclick="wrong_name()">
-        Cheesy &#129472;
-      </button>
-    </div>
-  </div>
-  <script>
-    let user_color = "";
-    function wrong_name() {
-      let username = document.getElementById('username').value;
-      let wrong = document.getElementById('wrong');
-      if (username != "" && user_color != "") {
-        console.log(`?name=${username}&color=${user_color}`);
-        window.location.replace(`game.html?name=${username}&color=${user_color}`);
-      } else if (username != "") {
-        wrong.innerHTML = "Choose any color!";
-      } else {
-        wrong.innerHTML = "Enter your name!";
-      }
-    }
-
-    function setColor(color) {
-      const param = '4px solid rgb(41, 41, 41)';
-      document.getElementById('red').style.border = param;
-      document.getElementById('green').style.border = param;
-      document.getElementById('blue').style.border = param;
-      document.getElementById('yellow').style.border = param;
-      document.getElementById(color).style.border = '4px solid white';
-      user_color = color;
-      console.log(color);
-    }
-  </script>
-  <footer>&copy;skynet</footer>
-</body>
-
-</html>
