@@ -1,3 +1,7 @@
+document.addEventListener('DOMContentLoaded', function(){
+    hideGame();
+});
+
 var socket = new WebSocket("ws://cheesygame.ru/game");
 
 socket.onopen = function (e) {
@@ -55,4 +59,32 @@ function MessageAdd(message) {
 
     chat_messages.insertAdjacentHTML("beforeend", message);
     chat_messages.scrollTop = chat_messages.scrollHeight;
+}
+let hidechat = 0;
+let mobile = 0;
+function hideChat () {
+    const main_screen = document.getElementById("main");
+    const game_screen = document.getElementById("game");
+    const chat_screen = document.getElementById("chatbox");
+    const button_hide = document.getElementById("button-hide");
+    if (hidechat)
+    {
+        if (/Android|webOS|iPhone|iPad|iPod|BlackBerry|BB|PlayBook|IEMobile|Windows Phone|Kindle|Silk|Opera Mini/i.test(navigator.userAgent)) {
+            main_screen.style.gridTemplateColumns = "1fr";
+            game_screen.style.display = "none";
+        }
+        else {
+            main_screen.style.gridTemplateColumns = "4fr 1fr";
+            game_screen.style.display = "block";
+        }
+        chat_screen.style.display = "block";
+        button_hide.innerHTML = "hide chat";
+    }
+    else {
+        main_screen.style.gridTemplateColumns = "1fr";
+        game_screen.style.display = "block";
+        chat_screen.style.display = "none";
+        button_hide.innerHTML = "show chat";
+    }
+    hidechat = !hidechat;
 }

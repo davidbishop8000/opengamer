@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <link rel="shortcut icon"
+    href="data:image/x-icon;base64, AAABAAEAEBAQAAEABAAoAQAAFgAAACgAAAAQAAAAIAAAAAEABAAAAAAAgAAAAAAAAAAAAAAAEAAAAAAAAAAAAAAABAGFAAAA/wAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAQEBAgACACAQEBACACACAAEBAQICAAAgEBAQAiAAAgAAAAACAAAAICIiIAIAAAIAAAACAgAAICAAAAICIAAgAgAAAgICACACAAAgAgAgIAIAIgAAAAAAAAIAAAEAERAQIAAAAQAQABAgAAABAREAECAAAAEQEAAQAiIgAQARERGq7QAAVtsAAKq9AABWewAA/v0AAAb7AAD69QAA+nYAAPq2AAD21gAAz/8AAL7FAAB+3QAAfo0AAH5dAACGwAAA"
+    type="image/x-icon" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width,initial-scale=1.0">
+  <title>Cheesy Parcheesi board game</title>
+  <link type="text/css" href="css/game.css" rel="stylesheet" />
+  <base target="_blank">
+</head>
+<body>
+  <div class="main" id="main">
+    <div class="game" id="game">
+		  <canvas id="renderCanvas"></canvas>
+    </div>
+    <div class="chatbox" id="chatbox">
+      <div id="chat">
+        <div id="chat-messages"></div>
+          <form id="chat-form" method="post">
+            <div id="send-messages">
+              <input type="text" name="message" placeholder="message..." maxlength="500" autocomplete="off" />
+              <button id="msg-send" type="submit">⥂</button>
+            </div>
+          </form>
+      </div>
+    </div>
+  </div>
+  <button class="button-hide noselect" id= "button-hide" onclick="hideChat()">hide chat</button>
+  <script type="text/javascript" src="js/chat.js"></script>
+  <script src="js/babylon.js"></script>
+  <script src="js/babylon.gridMaterial.js"></script>
+  <script src="js/sceneCreate.js"></script>
+  <script src="js/sceneExecute.js"></script>
+</body>
+</html>
