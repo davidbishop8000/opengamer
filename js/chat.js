@@ -67,7 +67,7 @@ function hideChat () {
     const game_screen = document.getElementById("game");
     const chat_screen = document.getElementById("chatbox");
     const button_hide = document.getElementById("button-hide");
-    if (hidechat)
+    if (!hidechat)
     {
         if (/Android|webOS|iPhone|iPad|iPod|BlackBerry|BB|PlayBook|IEMobile|Windows Phone|Kindle|Silk|Opera Mini/i.test(navigator.userAgent)) {
             main_screen.style.gridTemplateColumns = "1fr";
