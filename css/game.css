@@ -221,16 +221,34 @@
     div.message {
       font-family: "sans-serif";
       font-size: medium;
+      max-width: 300px;
+      margin-left: 3px;
+    }
+
+    div.message.connect {
+      color: #c32db9;
+    }
+
+    div.message.disconnect {
+      color: #acacac;
     }
 
     div.message.green {
-      color: #95d592;
+      color: #86ff80;
+    }
+
+    div.message.error {
+      color: #ff0000;
     }
 
     div.message.red {
-      color: #d59292;
+      color: #ff5e5e;
     }
 
     div.message.blue {
-      color: #9592d5;
+      color: #97ccfd;
+    }
+
+    div.message.yellow {
+      color: #eaf730;
     }

@@ -44,18 +44,21 @@ int main() {
            std::function<void(const HttpResponsePtr &)> &&callback) {
             HttpResponsePtr resp = HttpResponse::newHttpResponse();
             std::string name = req->getParameter("name");
-            std::string color = req->getParameter("color");			
+            std::string color = req->getParameter("color");
+			//req->session()->erase("name");
+			//req->session()->erase("color");
+			//req->session()->erase("logged");
             if (name != "" && color != "")
             {
-				if (color != "red" || color != "green" || color != "blue" || color != "yellow")
+				/*if (color != "red" || color != "green" || color != "blue" || color != "yellow")
 				{
 					color = "black";
-				}
+				}*/
 				req->session()->insert("name", name);
 				req->session()->insert("color", color);
                 req->session()->insert("logged", true);
                 //resp->setBody("<script>window.location.href = \"/game.html\";</script>");
-				resp->setBody("{\"message\" : \"logged ok\"}");
+				resp->setBody("{\"message\" : \"logged\"}");
                 callback(resp);
             }
             else
@@ -63,14 +66,11 @@ int main() {
                 //resp->setStatusCode(k401Unauthorized);
 				//resp->setBody("<script>window.location.href = \"/game.html\";</script>");
                 //resp->setBody("<script>window.location.href = \"/login.html\";</script>");
-				resp->setBody("{\"message\" : \"not logged\"}");
+				resp->setBody("{\"message\" : \"error\"}");
                 callback(resp);
 				name = "monster";
 				color = "black";
             }
-			std::cout << name << std::endl;
-			std::cout << color << std::endl;
-			std::cout << "recv" << std::endl;
         },
         {Post});
 	
@@ -80,7 +80,7 @@ int main() {
     //Load config file
     app().loadConfigFile("../config.json");
     //Run HTTP framework,the method will block in the internal event loop
-	app().enableSession(1h);
+	app().enableSession(0.1h);
     app().run();
     return 0;
 }

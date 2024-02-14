@@ -3,7 +3,7 @@ function wrong_name() {
   let username = document.getElementById('username').value;
   let wrong = document.getElementById('wrong');
   if (username != "" && user_color != "") {
-    console.log(`sender?name=${username}&color=${user_color}`);
+    //console.log(`sender?name=${username}&color=${user_color}`);
     playerLogin(username, user_color);
     //window.location.replace(`game.html?name=${username}&color=${user_color}`);
   } else if (username != "") {
@@ -26,8 +26,9 @@ function setColor(color) {
 
 async function playerLogin(uname, ucolor) {
     try {
-        var params = new URLSearchParams('name=' + uname + '&color=' + ucolor);
-        const response = await fetch(`login`, {
+        var params = new URLSearchParams(`name=${uname}&color=${ucolor}`);
+        console.log(`fetch?name=${uname}&color=${ucolor}`);
+        const response = await fetch('login', {
             method: 'POST',
             /*headers: {
                 'Accept': 'application/json',
@@ -43,7 +44,12 @@ async function playerLogin(uname, ucolor) {
                 //if (data.message == "Успешно") e_stat.style.color = "green";
                 //else e_stat.style.color = "red";}
                 console.log(data.message);
-                console.log(`fetch?name=${uname}&color=${ucolor}`);
+                if (data.message == "logged") {                
+                  window.location.replace(`game.html`);
+                }
+                else {
+                  document.getElementById('wrong').innerHTML = "Login error";;
+                }
             }
         }
     } catch (e) {
