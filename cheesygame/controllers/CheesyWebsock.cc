@@ -1,8 +1,11 @@
 #include "CheesyWebsock.h"
 #include <iostream>
 #include <fstream>
+#include <deque>
 
 //extern std::unordered_map<std::string, unsigned> players;
+
+std::deque<std::string> last_msg{"", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", ""};
 
 struct Subscriber
 {
@@ -51,6 +54,8 @@ void CheesyWebsock::handleNewMessage(const WebSocketConnectionPtr& wsConnPtr, st
 			std::string str = os.str();
 			chatRooms_.publish(s.chatRoomName_, str);
 			
+			last_msg.pop_front();
+			last_msg.push_back(str);			
 
 			std::ofstream chat_log("chatlogs.log", std::ios::app);
 			//chat_log.open("chatlogs.log");
@@ -95,6 +100,10 @@ void CheesyWebsock::handleNewConnection(const HttpRequestPtr &req, const WebSock
                                      wsConnPtr->send(message);
                                  });
     wsConnPtr->setContext(std::make_shared<Subscriber>(std::move(s)));
+	for (std::string str : last_msg)
+	{
+		wsConnPtr->send(str);
+	}
 }
 
 void CheesyWebsock::handleConnectionClosed(const WebSocketConnectionPtr& wsConnPtr)

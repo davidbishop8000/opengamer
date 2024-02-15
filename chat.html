@@ -8,15 +8,23 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width,initial-scale=1.0">
   <title>Cheesy Parcheesi board game</title>
-  <link type="text/css" href="css/game.css" rel="stylesheet" />
+  <link type="text/css" href="css/chat.css" rel="stylesheet" />
   <base target="_blank">
 </head>
 <body>
-	<canvas id="renderCanvas"></canvas>
-  <script type="text/javascript" src="js/game.js"></script>
-  <script src="js/babylon.js"></script>
-  <script src="js/babylon.gridMaterial.js"></script>
-  <script src="js/sceneCreate.js"></script>
-  <script src="js/sceneExecute.js"></script>
+  <div class="main" id="main">
+    <div class="chatbox" id="chatbox">
+      <div id="chat">
+        <div id="chat-messages"></div>
+          <form id="chat-form" method="post">
+            <div id="send-messages">
+              <input type="text" name="message" placeholder="message..." maxlength="500" autocomplete="off" />
+              <button id="msg-send" type="submit">⥂</button>
+            </div>
+          </form>
+      </div>
+    </div>
+  </div>
+  <script type="text/javascript" src="js/chat.js"></script>
 </body>
 </html>

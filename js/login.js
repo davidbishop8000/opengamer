@@ -45,7 +45,7 @@ async function playerLogin(uname, ucolor) {
                 //else e_stat.style.color = "red";}
                 console.log(data.message);
                 if (data.message == "logged") {                
-                  window.location.replace(`game.html`);
+                  window.location.replace(`gamechat.html`);
                 }
                 else {
                   document.getElementById('wrong').innerHTML = "Login error";;

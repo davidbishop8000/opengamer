@@ -3,10 +3,7 @@ var socket = new WebSocket("ws://cheesygame.ru/game");
 socket.onopen = function (e) {
     console.log("[open] Соединение установлено");
     console.log("Отправляем данные на сервер");
-    /*socket.send(JSON.stringify({
-		room_name: 'cheesy',
-	}));*/
-    MessageAdd('<div class="message connect">You have entered.</div>');
+    //MessageAdd('<div class="message connect">You have entered.</div>');
 };
 
 socket.onmessage = function (event) {
@@ -14,7 +11,7 @@ socket.onmessage = function (event) {
     //MessageAdd('<div class="message">' +  event.data + '</div>');
     let data = JSON.parse(event.data);
     if (data.type == "msg") {
-        MessageAdd(`<div class="message ${data.color}">` + data.name + ': ' + data.message + '</div>');
+        //MessageAdd(`<div class="message ${data.color}">` + data.name + ': ' + data.message + '</div>');
     }
 };
 
@@ -24,12 +21,12 @@ socket.onclose = function (event) {
     } else {
         console.log('[close] Соединение прервано');
     }
-    MessageAdd('<div class="message disconnect">You have been disconnected.</div>');
+    //MessageAdd('<div class="message disconnect">You have been disconnected.</div>');
 };
 
 socket.onerror = function (error) {
     console.log(`[error]`);
-    MessageAdd('<div class="message error">Connection to chat failed.</div>');
+    //MessageAdd('<div class="message error">Connection to chat failed.</div>');
 };
 
 // on chat form submit:
@@ -52,9 +49,9 @@ document.getElementById("chat-form").addEventListener("submit", function (event)
 }, false);
 
 // add message to chat:
-function MessageAdd(message) {
+/*function MessageAdd(message) {
     var chat_messages = document.getElementById("chat-messages");
 
     chat_messages.insertAdjacentHTML("beforeend", message);
     chat_messages.scrollTop = chat_messages.scrollHeight;
-}
+}*/
